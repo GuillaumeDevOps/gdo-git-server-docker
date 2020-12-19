@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Get the IP so we can see it in the container log
+netstat -nr
+
+
 # If there is some public key in keys folder
 # then it copies its contain in authorized_keys file
 if [ "$(ls -A /git-server/keys/)" ]; then

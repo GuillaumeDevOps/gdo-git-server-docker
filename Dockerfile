@@ -1,14 +1,22 @@
-FROM alpine:3.4
+#FROM alpine:3.4
+FROM jgwill/ubuntu
 
-MAINTAINER Carlos Bernárdez "carlos@z4studios.com"
+ARG DEBIAN_FRONTEND=noninteractive
+
+#MAINTAINER Carlos Bernárdez "carlos@z4studios.com"
+MAINTAINER GUillaume Descoteaux-Isabelle "jgi@jgwill.com"
 
 # "--no-cache" is new in Alpine 3.3 and it avoid using
 # "--update + rm -rf /var/cache/apk/*" (to remove cache)
-RUN apk add --no-cache \
+RUN apt update 
+RUN apt install -y  \
 # openssh=7.2_p2-r1 \
-  openssh \
+   openssh-server \
 # git=2.8.3-r0
-  git
+  git 
+RUN apt install -y \
+# Routing to determine IP
+  iproute2
 
 # Key generation on the server
 RUN ssh-keygen -A
@@ -35,6 +43,8 @@ COPY git-shell-commands /home/git/git-shell-commands
 # sshd_config file is edited for enable access key and disable access password
 COPY sshd_config /etc/ssh/sshd_config
 COPY start.sh start.sh
+
+# RUN apt install -y iproute2
 
 EXPOSE 22
 
